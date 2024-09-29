@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Entries</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .entry-card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Journal Entries</h1>
+        <form id="journalForm" class="mb-4">
+            <div class="form-group">
+                <label for="entryText">New Entry</label>
+                <textarea class="form-control" id="entryText" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Entry</button>
+        </form>
+        <div id="entriesContainer"></div>
+    </div>
+
+    <script>
+        document.getElementById('journalForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const entryText = document.getElementById('entryText').value;
+            const timestamp = new Date().toLocaleString();
+            addEntry(entryText, timestamp);
+            document.getElementById('entryText').value = '';
+        });
+
+        function addEntry(text, timestamp) {
+            const entryCard = document.createElement('div');
+            entryCard.className = 'card entry-card';
+            entryCard.innerHTML = `
+                <div class="card-body">
+                    <p class="card-text">${text}</p>
+                    <p class="card-text"><small class="text-muted">${timestamp}</small></p>
+                    <button class="btn btn-secondary btn-sm" onclick="editEntry(this)">Edit</button>
+                </div>
+            `;
+            document.getElementById('entriesContainer').appendChild(entryCard);
+        }
+
+        function editEntry(button) {
+            const cardBody = button.parentElement;
+            const textElement = cardBody.querySelector('.card-text');
+            const text = textElement.innerText;
+            const newText = prompt('Edit your entry:', text);
+            if (newText !== null) {
+                textElement.innerText = newText;
+            }
+        }
+    </script>
+</body>
+</html>
